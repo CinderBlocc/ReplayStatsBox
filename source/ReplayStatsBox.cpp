@@ -7,13 +7,7 @@
 
 using namespace std;
 
-
-/*
-TO-DO
-	- Fix matching local username to playerNames, but that would probably skip the player if it actually shows them :shrug:
-*/
-
-BAKKESMOD_PLUGIN(ReplayStatsBox, "Replay Stats Box", "0.9", PLUGINTYPE_REPLAY)
+BAKKESMOD_PLUGIN(ReplayStatsBox, "Replay Stats Box", "1.0", PLUGINTYPE_REPLAY)
 
 string playerStats[6] = {"Unknown", "0", "0", "0", "0", "0"};
 string playerNames[8];
@@ -21,8 +15,8 @@ LinearColor boxColor = {0,0,0,0};
 
 void ReplayStatsBox::onLoad()
 {
-	cvarManager->registerNotifier("rsbShowStats", [this](std::vector<string> params){rsbShow();}, "Displays stats box during replays", PERMISSION_ALL);
-	cvarManager->registerNotifier("rsbHideStats", [this](std::vector<string> params){rsbHide();}, "Displays stats box during replays", PERMISSION_ALL);
+	cvarManager->registerNotifier("rsbShowStats", [this](std::vector<string> params){rsbShow();}, "Displays stats box", PERMISSION_ALL);
+	cvarManager->registerNotifier("rsbHideStats", [this](std::vector<string> params){rsbHide();}, "Hides stats box", PERMISSION_ALL);
 
 	posX = make_shared<float>(2);
 	posY = make_shared<float>(85);
@@ -50,6 +44,8 @@ void ReplayStatsBox::rsbShow()
 void ReplayStatsBox::rsbHide()
 {
 	this->showStats = false;
+	gameWrapper->UnregisterDrawables();
+	this->drawablesAreRegistered = false;
 }
 
 
